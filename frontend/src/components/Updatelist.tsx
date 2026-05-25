@@ -1,0 +1,54 @@
+
+import { useState } from "react"
+import axios from "axios";
+
+
+
+export default function Updatelist({ upopen, setupdate, item}: any) {
+
+    const [list, setlist] = useState({
+        name: item.name,
+        description: item.description,
+        time:item.time,
+    })
+
+    const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setlist((prev) => {
+            return { ...prev, [name]: value }
+        })
+    }
+
+    const sub = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        try {
+            await axios.put(`${import.meta.env.VITE_APP_URL}/update/${item._id}`, list);
+            setupdate(false);
+            window.location.reload()
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
+
+
+    return (<>
+       { upopen && <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+            <div className="relative flex bg-gray-200 w-[500px] justify-center p-8 rounded-4xl">
+                <div className="absolute top-4 right-4">
+                    <button onClick={() => { setupdate(false) }}>X</button>
+
+                </div>
+                <form className="flex flex-col gap-1" onSubmit={sub}>
+                    <label className="font-bold">Title:</label><input onChange={handler} value={list.name} type="text" name="name" placeholder="enter your task" className="border border-black p-1 rounded-4xl"></input><br></br>
+                    <label className="font-bold">Description:</label><input onChange={handler} value={list.description} name="description" type="text" placeholder="enter descreiption" className="border border-black p-1 rounded-4xl"></input><br></br>
+                    <label className="font-bold">Start Time:</label><input type="text" onChange={handler} name="time" value={list.time} placeholder="eg: 8:00 AM" className="border border-black p-1 rounded-4xl"></input>
+                   
+                    <button type="submit" className="bg-green-600 text-white py-2 rounded-4xl hover:bg-green-700">
+                        Update</button>
+                </form>
+            </div>
+        </div>}
+    </>)
+}
