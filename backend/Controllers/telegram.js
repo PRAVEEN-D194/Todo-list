@@ -13,8 +13,6 @@ async function sendMessage(text) {
                 text: text
             }
         );
-
-        console.log("Message sent");
     } catch (err) {
         console.log("Error:", err);
     }
