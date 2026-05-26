@@ -13,8 +13,8 @@ const Todolist = new mongoose.Schema({
         type:String,
         required:true,
     },
-    timenumber:{
-        type:Number,
+    messagetime:{
+        type:String,
     },
     completed:{
         type:Boolean,

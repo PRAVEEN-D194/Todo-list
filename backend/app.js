@@ -4,7 +4,7 @@ const path = require("path");
 const connection = require("./config/db");
 const router = require('./routes/todo');
 const cors = require('cors');
-
+require("./Controllers/scheduler"); 
 dotenv.config({path:'./.env'})
 
 const app=express();

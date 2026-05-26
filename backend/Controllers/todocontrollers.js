@@ -33,14 +33,37 @@ const postlist = async (req, res)=>{
         else if(modifier=="PM" && hours !== 12){
             hours = hours + 12;
         }
-        return hours*100 + minutes;
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 
     }
+
+//     function convertTime(timeStr) {
+//     let [time, modifier] = timeStr.split(" ");
+//     let [hours, minutes] = time.split(":").map(Number);
+
+//     // convert to 24-hour base first
+//     if (modifier === "PM" && hours !== 12) {
+//         hours += 12;
+//     }
+//     if (modifier === "AM" && hours === 12) {
+//         hours = 0;
+//     }
+
+//     // add 2 hours (based on your example)
+//     hours += 2;
+
+//     // handle overflow past 24
+//     hours = hours % 24;
+
+//     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+// }
+
 
         const value = req.body;
          const newTodo = {
         ...value,
-        timenumber: convertTimetoNumber(value.time)
+        
+        messagetime:  convertTimetoNumber(value.time)
         };
         await Todolist.create(newTodo);
         res.status(201).json({
