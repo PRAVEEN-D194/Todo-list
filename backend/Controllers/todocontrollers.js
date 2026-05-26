@@ -4,7 +4,7 @@ const getlist = async (req, res)=>{
 
     try{
         
-        const list = await Todolist.find().sort({timenumber:1});
+        const list = await Todolist.find({});
         res.status(201).json({
             success:true,
             list:list,

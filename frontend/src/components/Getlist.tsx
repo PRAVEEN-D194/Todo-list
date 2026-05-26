@@ -11,7 +11,7 @@ import Updatelist from "./Updatelist";
 //     item:item,
 //     index:number
 // }
-export default function Getlsit({item, index}:any) {
+export default function Getlsit({item, index, reload}:any) {
     const [upopen, setupdate] = useState(false);
     const [completed, setcompleted] = useState({
         completed:item.completed,
@@ -20,7 +20,7 @@ export default function Getlsit({item, index}:any) {
 
         try{
             await axios.delete(`${import.meta.env.VITE_APP_URL}/delete/${item._id}`);
-            window.location.reload()
+            reload();
         }catch(err){
             console.log(err);
         }
@@ -36,7 +36,6 @@ export default function Getlsit({item, index}:any) {
         console.log(completed)
         try{
             await axios.put(`${import.meta.env.VITE_APP_URL}/updatecompleted/${item._id}`, {completed : updatevalue})
-            window.location.reload();
         }catch(err){
             console.log(err);    
         }
@@ -120,6 +119,7 @@ export default function Getlsit({item, index}:any) {
         upopen={upopen}
         setupdate={setupdate}
         item={item}
+        reload={reload}
     />
 
 </div>

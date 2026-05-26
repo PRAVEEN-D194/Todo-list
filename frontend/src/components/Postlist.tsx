@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from "axios";
 
-export default function Postlist({listopen, setlistopen}:any){
+export default function Postlist({listopen, setlistopen, reload}:any){
     const [list, setlist] = useState({
         name:"",
         description:"",
@@ -14,7 +14,7 @@ export default function Postlist({listopen, setlistopen}:any){
             await axios.post(`${import.meta.env.VITE_APP_URL}/post`, list);
             setlistopen(false);
 
-            window.location.reload()
+            reload();
 
         }catch(err){
             console.log(err)
@@ -37,7 +37,7 @@ export default function Postlist({listopen, setlistopen}:any){
     listopen && <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
     <div className="relative flex bg-gray-200 w-[500px] justify-center p-8 rounded-4xl">
         <div className="absolute top-4 right-4">
-            <button onClick={()=>setlistopen(false)}>X</button>
+            <button onClick={()=>setlistopen(false) } className="text-3xl text-gray-400">X</button>
             
         </div>
         <form className="flex flex-col gap-1" onSubmit={sub}>
