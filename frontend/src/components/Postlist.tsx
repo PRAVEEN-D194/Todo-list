@@ -1,5 +1,7 @@
 import { useState } from "react"
 import axios from "axios";
+import { RingLoader
+} from "react-spinners";
 
 export default function Postlist({listopen, setlistopen, reload}:any){
     const [list, setlist] = useState({
@@ -7,18 +9,21 @@ export default function Postlist({listopen, setlistopen, reload}:any){
         description:"",
         time:""
     })
+    const[loading, setloading] = useState(false);
 
     const sub = async(e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
+        setlistopen(false);
+        setloading(true);
         try{
             await axios.post(`${import.meta.env.VITE_APP_URL}/post`, list);
-            setlistopen(false);
-
             reload();
 
         }catch(err){
             console.log(err)
-        }
+        }finally{
+                setloading(false);
+            }
     }
      
 
@@ -32,9 +37,16 @@ export default function Postlist({listopen, setlistopen, reload}:any){
     
   
 
-    return(
+    return(<>
+    {
+        loading && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+            <RingLoader
+ color="white" size={70} />
+        </div>
+        )}
 
-    listopen && <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+    {listopen && (<div className="fixed inset-0 bg-black/50 flex justify-center items-center">
     <div className="relative flex bg-gray-200 w-[500px] justify-center p-8 rounded-4xl">
         <div className="absolute top-4 right-4">
             <button onClick={()=>setlistopen(false) } className="text-3xl text-gray-400">X</button>
@@ -48,6 +60,7 @@ export default function Postlist({listopen, setlistopen, reload}:any){
                         Submit</button>
         </form>
         </div>
-    </div>
+    </div>)}
+    </>
     )
 }

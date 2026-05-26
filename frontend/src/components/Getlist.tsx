@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { useState } from "react";
+import { PropagateLoader} from "react-spinners";
 import Updatelist from "./Updatelist";
 // interface item {
 //     _id:String,
@@ -13,35 +14,47 @@ import Updatelist from "./Updatelist";
 // }
 export default function Getlsit({item, index, reload}:any) {
     const [upopen, setupdate] = useState(false);
+    const[loading, setloading] = useState(false);
     const [completed, setcompleted] = useState({
         completed:item.completed,
     });
     const ondelete = async()=>{
-
+        setloading(true);
         try{
             await axios.delete(`${import.meta.env.VITE_APP_URL}/delete/${item._id}`);
             reload();
         }catch(err){
             console.log(err);
-        }
+        }finally{
+                setloading(false);
+            }
     }
 
     const oncheck = async()=>{
-        console.log("jello")
-        console.log(completed)
+        setloading(true);
         const updatevalue = !completed.completed
         setcompleted({
             completed:updatevalue
         })
-        console.log(completed)
         try{
             await axios.put(`${import.meta.env.VITE_APP_URL}/updatecompleted/${item._id}`, {completed : updatevalue})
         }catch(err){
             console.log(err);    
-        }
+        }finally{
+                setloading(false);
+            }
     }
 
     return (<>
+
+    {
+        loading && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+            <PropagateLoader color="white" size={20} />
+        </div>
+        )}
+
+
     <div className="flex flex-col sm:flex-row justify-between bg-blue-200 w-full rounded-2xl p-4 sm:p-6 gap-5 shadow-md overflow-hidden">
 
     {/* LEFT */}

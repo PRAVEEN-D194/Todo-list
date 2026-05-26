@@ -2,7 +2,7 @@
 import { useState } from "react"
 import axios from "axios";
 
-
+import { RotateLoader} from "react-spinners";
 
 export default function Updatelist({ upopen, setupdate, item, reload}: any) {
 
@@ -11,7 +11,7 @@ export default function Updatelist({ upopen, setupdate, item, reload}: any) {
         description: item.description,
         time:item.time,
     })
-
+    const[loading, setloading] = useState(false);
     const handler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setlist((prev) => {
@@ -20,20 +20,30 @@ export default function Updatelist({ upopen, setupdate, item, reload}: any) {
     }
 
     const sub = async (e: React.FormEvent<HTMLFormElement>) => {
+        setloading(true);
+        setupdate(false);
         e.preventDefault()
         try {
-            await axios.put(`${import.meta.env.VITE_APP_URL}/update/${item._id}`, list);
-            setupdate(false);
+            await axios.put(`${import.meta.env.VITE_APP_URL}/update/${item._id}`, list);  
             reload();
         } catch (err) {
             console.log(err)
-        }
+        }finally{
+                setloading(false);
+            }
     }
 
 
 
 
     return (<>
+
+    {
+        loading && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+            <RotateLoader color="white" size={20} />
+        </div>
+        )}
        { upopen && <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
             <div className="relative flex bg-gray-200 w-[500px] justify-center p-8 rounded-4xl">
                 <div className="absolute top-4 right-4 ">
