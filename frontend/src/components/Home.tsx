@@ -26,7 +26,7 @@ export default function Home(){
 
             <button  className="font-bold text-xl sm:text-3xl px-6 py-3 sm:px-16 sm:py-6 bg-violet-200 rounded-3xl mt-6 mb-6 hover:bg-violet-300 active:bg-violet-400 transition" onClick={()=>{setlistopen(true)}}>Add list</button>
             <Postlist listopen={listopen} setlistopen={setlistopen}></Postlist>
-            <div className="flex flex-col sm:flex-row bg-blue-300 sm:w-[65%] w-[95%] max-w-[1200px] mx-auto p-2 sm:p-2 rounded-lg gap-4">
+            <div className="flex flex-col gap-4 w-full sm:w-[85%] max-w-[1100px]">
             {list.map((list, index)=>(
                 <Getlsit
                     key={index}

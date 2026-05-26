@@ -110,4 +110,21 @@ const updatelist = async (req, res)=>{
     }
 }
 
-module.exports = {getlist:getlist, postlist:postlist, deletelist:deletelist, updatelist:updatelist};
+const updatecompleted = async(req,res)=>{
+    try{
+        const id = req.params.id;
+        const list = await Todolist.findById({_id:id});
+        list.completed = req.body.completed;
+        await list.save();
+        res.status(201).json({
+            success:true
+        })
+    }catch(err){
+        res.status(500).json({
+            success:false,
+            message:err.message,
+        })
+    }
+}
+
+module.exports = {getlist:getlist, postlist:postlist, deletelist:deletelist,updatecompleted:updatecompleted, updatelist:updatelist};

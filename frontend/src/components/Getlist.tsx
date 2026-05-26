@@ -13,7 +13,9 @@ import Updatelist from "./Updatelist";
 // }
 export default function Getlsit({item, index}:any) {
     const [upopen, setupdate] = useState(false);
-    const [completed, setcompleted] = useState(false);
+    const [completed, setcompleted] = useState({
+        completed:item.completed,
+    });
     const ondelete = async()=>{
 
         try{
@@ -24,46 +26,103 @@ export default function Getlsit({item, index}:any) {
         }
     }
 
+    const oncheck = async()=>{
+        console.log("jello")
+        console.log(completed)
+        const updatevalue = !completed.completed
+        setcompleted({
+            completed:updatevalue
+        })
+        console.log(completed)
+        try{
+            await axios.put(`${import.meta.env.VITE_APP_URL}/updatecompleted/${item._id}`, {completed : updatevalue})
+            window.location.reload();
+        }catch(err){
+            console.log(err);    
+        }
+    }
+
     return (<>
-    <div className="flex bg-blue-300 w-full max-w-[1200px] mx-auto py-2 sm:py-10 rounded-lg justify-between items-start px-2 gap-4">
+    <div className="flex flex-col sm:flex-row justify-between bg-blue-200 w-full rounded-2xl p-4 sm:p-6 gap-5 shadow-md overflow-hidden">
 
     {/* LEFT */}
-    <div className="flex flex-col gap-2">
-    <div className="w-6 sm:w-10 text-center font-bold text-sm sm:text-base">
-        {index + 1}
-    </div>
-    
-    <input type="checkbox"  onChange={()=>{setcompleted(!completed)}}></input>
+    <div className="flex items-start gap-3 sm:gap-5 shrink-0">
 
+        <div className="font-bold text-base sm:text-xl min-w-[30px] text-center">
+            {index + 1}
+        </div>
 
-    <div className={completed? "line-through text-gray-500  w-6 sm:w-10 text-center  text-sm sm:text-base" :"w-6 sm:w-10 text-center font-bold text-sm sm:text-base"} >
-        {item.time}
-    </div>
+        <button
+            className="text-xl"
+            onClick={oncheck}
+        >
+            {completed.completed ? "✅" : "🔲"}
+        </button>
+
+        <div
+            className={
+                completed.completed
+                    ? "line-through text-gray-500 text-sm sm:text-lg"
+                    : "text-sm sm:text-lg font-semibold"
+            }
+        >
+            {item.time}
+        </div>
     </div>
 
     {/* MIDDLE */}
-    <div className="flex-1 px-2 sm:px-4 break-words overflow-hidden">
-        <h1 className={`${completed ? "line-through text-gray-500 text-base sm:text-2xl " : "font-bold text-base sm:text-2xl text-green-700"}text-base sm:text-2xl break-words`}>
+    <div className="flex-1 min-w-0 break-words">
+
+        <h1
+            className={
+                completed.completed
+                    ? "line-through text-gray-500 text-lg sm:text-2xl break-words"
+                    : "font-bold text-green-700 text-lg sm:text-2xl break-words"
+            }
+        >
             {item.name}
         </h1>
-        <h1 className={`${completed? " line-through text-gray-500 text-sm sm:text-2xl" : "text-sm sm:text-2xl text-gray-800"} text-sm sm:text-2xl break-words`}>
+
+        <p
+            className={
+                completed.completed
+                    ? "line-through text-gray-500 text-sm sm:text-lg mt-1 break-words"
+                    : "text-gray-800 text-sm sm:text-lg mt-1 break-words"
+            }
+        >
             {item.description}
-        </h1>
+        </p>
     </div>
+{/* RIGHT */}
+<div className="w-full sm:w-[220px] shrink-0">
 
-    {/* RIGHT */}
-    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end">
+    <div className="grid grid-cols-2 gap-3 sm:flex">
 
-        <button onClick={ondelete} className="bg-red-700 text-white text-xs sm:text-sm px-2 sm:px-5 py-1 sm:py-4 rounded-2xl hover:bg-red-400 active:bg-red-900">
+        <button
+            onClick={ondelete}
+            className="w-full bg-red-700 text-white text-sm sm:text-base px-4 py-2 sm:px-5 sm:py-3 rounded-xl hover:bg-red-500 active:bg-red-900 transition"
+        >
             Delete
         </button>
 
-        <button onClick={()=>{setupdate(true)} } className="bg-blue-700 text-white text-xs sm:text-sm px-2 sm:px-5 py-1 sm:py-4 rounded-2xl hover:bg-blue-400 active:bg-blue-900">
+        <button
+            onClick={() => {
+                setupdate(true);
+            }}
+            className="w-full bg-blue-700 text-white text-sm sm:text-base px-4 py-2 sm:px-5 sm:py-3 rounded-xl hover:bg-blue-500 active:bg-blue-900 transition"
+        >
             Update
         </button>
-        <Updatelist upopen={upopen} setupdate={setupdate} item={item}></Updatelist>
 
     </div>
+
+    <Updatelist
+        upopen={upopen}
+        setupdate={setupdate}
+        item={item}
+    />
+
+</div>
 
 </div>
 

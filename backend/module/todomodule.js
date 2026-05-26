@@ -15,6 +15,10 @@ const Todolist = new mongoose.Schema({
     },
     timenumber:{
         type:Number,
+    },
+    completed:{
+        type:Boolean,
+        default:false,
     }
     
 },{timestamps:true})
